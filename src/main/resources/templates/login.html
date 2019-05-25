@@ -31,7 +31,6 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-
                     <li><a href="/login">login</a></li>
                     <li><a href="/books">See books</a></li>
                     <li><a href="/Register">Register</a></li>
@@ -45,20 +44,14 @@
                 </ul>
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
-    </nav>
-    <!-- Main component for a primary marketing message or call to action -->
+    </nav>    <!-- Main component for a primary marketing message or call to action -->
     <div class="jumbotron">
-        <!--Usage of models we wrote in WepAppController th:text="'Welcome to basic Bootstrap with Spring Boot created by ' + ${username} -->
-        <h3 th:text="'Welcome to basic Bootstrap with Spring Boot created by ' + ${username}"></h3>
-        <p th:text="'This date example  ' + ${#dates.format(datetime, 'dd MMM yyyy HH:mm')}"></p>
-        <p> is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work.
-            It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
-        <p>
-            <a class="btn btn-lg btn-primary" href="#" role="button">View navbar docs &raquo;</a>
-        </p>
-
-        <!--/*@thymesVar id="forEach" type=""*/-->
-
+       <form method="get" action="/logedin" >
+           <p>Input UserName:</p><input type="text" name="Name"/> <br/>
+           <p>Input Email :</p><input type="text" name="Email"/>
+           <p>Confirm Password :</p><input type="text" name="Passwd"/>
+    <input type="submit" name="submitthatshit">
+       </form>
     </div>
 </div> <!-- /container -->
 <!-- Bootstrap core JavaScript
