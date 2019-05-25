@@ -1,6 +1,8 @@
 package com.bootstrapwithspringboot.webapp.contoller;
 import com.bootstrapwithspringboot.webapp.model.books;
 import com.bootstrapwithspringboot.webapp.model.users;
+import com.bootstrapwithspringboot.webapp.model.credit;
+import com.bootstrapwithspringboot.webapp.repository.Creditrepository;
 import com.bootstrapwithspringboot.webapp.repository.bookrepository;
 import com.bootstrapwithspringboot.webapp.repository.Usersrepository;
 import com.bootstrapwithspringboot.webapp.repository.libsrepository;
@@ -8,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -112,7 +112,7 @@ public class WebAppContoller {
                                             @RequestParam String bLink,
                                             @RequestParam String bDescription,
                                             @RequestParam Integer bPrice
-                                            ){
+    ){
         books n = new books();
         n.setbName(bName);
         n.setbCover(bCover);
@@ -127,8 +127,8 @@ public class WebAppContoller {
                                            @RequestParam String Passwd,
                                            @RequestParam String Passwd2,
                                            @RequestParam String Email){
-       Date date = new Date();
-       String newdate= date.toString();
+        Date date = new Date();
+        String newdate= date.toString();
         users n = new users();
         n.setAdmin_not(0);
         n.setCredit(0);
@@ -144,23 +144,72 @@ public class WebAppContoller {
 
     }
 
-   @RequestMapping("/all")
+    @RequestMapping("/all")
     public  String getAllUsers(Model model) {
-       String username= currentuser.getUser_name();
+        String username= currentuser.getUser_name();
 
-       if(username!=null) {
-           model.addAttribute("username", username);
-       }
-       model.addAttribute("mode", appMode);
+        if(username!=null) {
+            model.addAttribute("username", username);
+        }
+        model.addAttribute("mode", appMode);
 
 
-       model.addAttribute("datetime", new Date());
-       model.addAttribute("username", username);
-       model.addAttribute("projectname", "WebApp");
-       model.addAttribute("books",bookrepository.findAll());
-       model.addAttribute("mode", appMode);
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", username);
+        model.addAttribute("projectname", "WebApp");
+        model.addAttribute("books",bookrepository.findAll());
+        model.addAttribute("mode", appMode);
 
-       return "index";
+        return "index";
+
+    }
+    @RequestMapping(value = "/addCash",  method ={ RequestMethod.POST, RequestMethod.GET})
+    public  String getcash(Model model) {
+        String username= currentuser.getUser_name();
+
+        //users user = (users) usersrepository.findByEmail(currentuser.getEmail());
+        //user.setCredit(credit);
+        //usersrepository.save(user);
+
+        if(username!=null) {
+            model.addAttribute("username", username);
+        }
+
+        model.addAttribute("books",bookrepository.findAll());
+        model.addAttribute("mode", appMode);
+
+
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", username);
+        model.addAttribute("dude", currentuser);
+        model.addAttribute("mode", appMode);
+
+        return "addcash";
+
+    }
+    @RequestMapping(value = "/addCash", params= "addcash" ,  method ={ RequestMethod.POST, RequestMethod.GET})
+    public  String getcash1(Model model,@RequestParam Integer credit) {
+        String username= currentuser.getUser_name();
+
+        users user = (users) usersrepository.findByEmail(currentuser.getEmail());
+        user.setCredit(credit+currentuser.getCredit());
+        usersrepository.save(user);
+
+        if(username!=null) {
+            model.addAttribute("username", username);
+        }
+
+        model.addAttribute("books",bookrepository.findAll());
+        model.addAttribute("mode", appMode);
+
+        currentuser = user;
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", username);
+        model.addAttribute("dude", currentuser);
+        model.addAttribute("mode", appMode);
+
+
+        return "addcash";
 
     }
 }
