@@ -12,9 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -191,7 +189,7 @@ public class WebAppContoller {
 
     }
 
-   @RequestMapping("/admin/users")
+   @RequestMapping(value = "/admin/users",  method ={ RequestMethod.POST, RequestMethod.GET})
     public  String getAllUsers(Model model) {
        String username= currentuser.getUser_name();
 
@@ -204,11 +202,55 @@ public class WebAppContoller {
 
        model.addAttribute("datetime", new Date());
        model.addAttribute("username", username);
-       model.addAttribute("projectname", "WebApp");
        model.addAttribute("dudes", usersrepository.findAll());
        model.addAttribute("mode", appMode);
 
        return "users";
+
+    }
+
+    @RequestMapping(value = "/admin/users", params= "demote" ,  method ={ RequestMethod.POST, RequestMethod.GET} )
+    public  String demoteuser(Model model,@RequestParam String email) {
+        users user1 = usersrepository.findByEmail(email);
+        user1.setAdmin_not(0);
+        usersrepository.save(user1);
+        String username= currentuser.getUser_name();
+
+        if(username!=null) {
+            model.addAttribute("username", username);
+        }
+        model.addAttribute("mode", appMode);
+        model.addAttribute("dude", currentuser);
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", username);
+        model.addAttribute("dudes", usersrepository.findAll());
+        model.addAttribute("mode", appMode);
+
+        return "users";
+
+    }
+    @RequestMapping(value = "/admin/users", params= "promote" ,  method ={ RequestMethod.POST, RequestMethod.GET})
+    public  String promoteuser(Model model,@RequestParam String email) {
+
+        users user1 = usersrepository.findByEmail(email);
+        user1.setAdmin_not(1);
+        usersrepository.save(user1);
+
+        String username= currentuser.getUser_name();
+
+        if(username!=null) {
+            model.addAttribute("username", username);
+        }
+        model.addAttribute("mode", appMode);
+
+        model.addAttribute("dude", currentuser);
+
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", username);
+        model.addAttribute("dudes", usersrepository.findAll());
+        model.addAttribute("mode", appMode);
+
+        return "users";
 
     }
     @RequestMapping(value = "/addCash",  method ={ RequestMethod.POST, RequestMethod.GET})
@@ -222,8 +264,6 @@ public class WebAppContoller {
 
         model.addAttribute("books",bookrepository.findAll());
         model.addAttribute("mode", appMode);
-
-
         model.addAttribute("datetime", new Date());
         model.addAttribute("username", username);
         model.addAttribute("dude", currentuser);
@@ -246,7 +286,6 @@ public class WebAppContoller {
 
         model.addAttribute("books",bookrepository.findAll());
         model.addAttribute("mode", appMode);
-
         currentuser = user;
         model.addAttribute("datetime", new Date());
         model.addAttribute("username", username);
