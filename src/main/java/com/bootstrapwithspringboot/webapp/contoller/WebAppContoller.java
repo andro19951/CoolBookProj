@@ -100,24 +100,25 @@ public class WebAppContoller {
     public String logedin(Model model, @RequestParam String Name,
                           @RequestParam String Passwd,
                           @RequestParam String Email) {
+        model.addAttribute("dude", currentuser);
+
         currentuser = (users) usersrepository.findByEmail(Email);
         String username = currentuser.getUser_name();
 
-        if (username != null) {
-            model.addAttribute("username", username);
-        }
-        model.addAttribute("mode", appMode);
 
-        model.addAttribute("dude", currentuser);
-
-        model.addAttribute("datetime", new Date());
-        model.addAttribute("username", username);
-        model.addAttribute("projectname", "WebApp");
-        model.addAttribute("books", bookrepository.findAll());
-        model.addAttribute("mode", appMode);
-        if (currentuser.getUser_name() == null) {
+        if (currentuser.getUser_name() == null || currentuser.getPassd() != Passwd) {
             return "login";
         } else {
+            if (username != null) {
+                model.addAttribute("mode", appMode);
+                model.addAttribute("username", username);
+            }
+            model.addAttribute("dude", currentuser);
+            model.addAttribute("datetime", new Date());
+            model.addAttribute("username", username);
+            model.addAttribute("projectname", "WebApp");
+            model.addAttribute("books", bookrepository.findAll());
+            model.addAttribute("mode", appMode);
             return "index";
         }
     }
@@ -376,16 +377,10 @@ public class WebAppContoller {
     @RequestMapping(value = "/yourbooks", method = {RequestMethod.GET, RequestMethod.POST})
     public String yourbooks(Model model) {
 
-        List<books> mybooks = new ArrayList<books>();
-        List<libs> liblist = (List<libs>) libsrepository.findAll();
-        for (libs li: liblist ) {
-            if(currentuser.getId()==li.getUserId()) {
-                books book = bookrepository.findFirstById(li.getId());
-                mybooks.add(book);
-            }
-        }
+
         model.addAttribute("dude", currentuser);
-        model.addAttribute("mybooks", mybooks);
+        model.addAttribute("somebooks", bookrepository.findAll());
+        model.addAttribute("mybooks", libsrepository.findAll());
         model.addAttribute("mode", appMode);
 
         return "yourlib";

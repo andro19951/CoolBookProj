@@ -53,7 +53,18 @@
         <th:block th:each="book : ${mybooks}">
             <tr>
                 <!--/*@thymesVar id="getbName" type="aj"*/-->
-               <td th:text="${book}"></td>
+                <span th:if="${dude.getId()==book.getUserId()}">
+                    <th:block th:each="bok : ${somebooks}">
+                        <span th:if="${bok.getId()==book.getBookId()}">
+                        <td th:text="${bok.getbName()}"></td>
+                            <td th:text="${bok.getbLink()}"></td>
+                            <td th:text="${bok.getbDescription()}"></td>
+
+
+                        </span>
+
+                    </th:block>
+
 
 
             </tr>
