@@ -56,7 +56,9 @@
             <td th:text="${user.getUser_name()}"></td>
             <td th:if="${user.getAdmin_not()==1}"><form method="post" action="#" > <input type="hidden" name="email" th:value="${user.getEmail()}"><button type="submit" class="btn-danger" name="demote" >demote</button></form></td>
             <td th:if="${user.getAdmin_not()==0}"><form method="post" action="#" > <input type="hidden" name="email" th:value="${user.getEmail()}"><button type="submit" class="btn-success" name="promote" >promote</button>
-            </form></td>
+            </form>
+            <td ><form method="post" action="#" > <input type="hidden" name="email" th:value="${user.getEmail()}"><button type="submit" class="btn-danger" name="delete" >demote</button></form></td>
+            </td>
 
         </tr>
     </th:block>

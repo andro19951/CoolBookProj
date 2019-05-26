@@ -2,9 +2,10 @@ package com.bootstrapwithspringboot.webapp.model;
 
 
 import javax.persistence.*;
+import java.util.Collections;
 
 @Entity
-@Table(name = "lib")
+@Table(name = "libs")
 public class libs {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

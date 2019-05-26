@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface bookrepository extends CrudRepository<books, Integer> {
 
     books findByBName(String bname);
+
+books findFirstById(Integer id);
 }
