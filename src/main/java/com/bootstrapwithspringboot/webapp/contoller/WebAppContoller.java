@@ -1,6 +1,7 @@
 package com.bootstrapwithspringboot.webapp.contoller;
 import com.bootstrapwithspringboot.webapp.model.books;
 import com.bootstrapwithspringboot.webapp.model.users;
+import com.bootstrapwithspringboot.webapp.model.libs;
 import com.bootstrapwithspringboot.webapp.model.credit;
 import com.bootstrapwithspringboot.webapp.repository.Creditrepository;
 import com.bootstrapwithspringboot.webapp.repository.bookrepository;
@@ -122,7 +123,7 @@ public class WebAppContoller {
     }
 
     @RequestMapping(value = "/admin/bookadded", method = {RequestMethod.GET, RequestMethod.POST})
-    public @ResponseBody String addNewBook (Model model,@RequestParam String bName,
+    public String addNewBook (Model model,@RequestParam String bName,
                                             @RequestParam String bCover,
                                             @RequestParam String bLink,
                                             @RequestParam String bDescription,
@@ -152,7 +153,7 @@ public class WebAppContoller {
         return "index";
     }
     @RequestMapping(value = "/is/registered", method = {RequestMethod.GET, RequestMethod.POST})
-    public @ResponseBody String addNewUser(Model model,@RequestParam String Name,
+    public String addNewUser(Model model,@RequestParam String Name,
                                            @RequestParam String Passwd,
                                            @RequestParam String Passwd2,
                                            @RequestParam String Email){
@@ -294,6 +295,57 @@ public class WebAppContoller {
 
 
         return "addcash";
+
+    }
+    @RequestMapping(value = "/books", method = {RequestMethod.GET, RequestMethod.POST})
+    public String allbooks(Model model){
+        String username= currentuser.getUser_name();
+
+
+        if(username!=null) {
+            model.addAttribute("username", username);
+        }
+
+        model.addAttribute("books",bookrepository.findAll());
+        model.addAttribute("mode", appMode);
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", username);
+        model.addAttribute("dude", currentuser);
+        model.addAttribute("mode", appMode);
+
+        return "books";
+
+    }
+    @RequestMapping(value = "/books",params = "buy", method = {RequestMethod.GET, RequestMethod.POST})
+    public String buybook(Model model, @RequestParam String getbName){
+
+        String username= currentuser.getUser_name();
+
+        books book1= (books) bookrepository.findByBName(getbName);
+        if(book1.getbPrice()<currentuser.getCredit()){
+            currentuser.setCredit(currentuser.getCredit()-book1.getbPrice());
+            libs lib = new libs();
+            lib.setBookId(book1.getId());
+            lib.setUserId(currentuser.getId());
+            libsrepository.save(lib);
+            users user = (users) usersrepository.findByEmail(currentuser.getEmail());
+            user.setCredit(currentuser.getCredit());
+            usersrepository.save(user);
+
+        }
+
+        if(username!=null) {
+            model.addAttribute("username", username);
+        }
+
+        model.addAttribute("books",bookrepository.findAll());
+        model.addAttribute("mode", appMode);
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", username);
+        model.addAttribute("dude", currentuser);
+        model.addAttribute("mode", appMode);
+
+        return "books";
 
     }
 }

@@ -49,16 +49,19 @@
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
     </nav>    <!-- Main component for a primary marketing message or call to action -->
-    <div class="jumbotron">
-       <form method="get" action="/admin/addbook" >
-           <p>Input book name :</p><input type="text" name="bName"/> <br/>
-           <p>Input book Cover link :</p><input type="text" name="bCover"/>
-           <p>Input book link :</p> <input type="text" name="bLink"/>
-           <p>Input book Description :</p><input type="text" name="bDescription"/>
-           <p>Input book price :</p> <input type="text" name="bPrice"/><br/>
-    <input type="submit" name="submitthatshit">
-       </form>
-    </div>
+    <table>
+        <th:block th:each="book : ${books}">
+            <tr>
+                <td th:text="${book.getbName()}"></td>
+                <td th:text="${book.getbDescription()}"></td>
+                <td th:text="${book.getbLink()}"></td>
+                <td th:text="${book.getbPrice()}"></td>
+                <td><form method="post" action="#" > <input type="hidden" name="bookid" th:value="${book.getbName()}"><button type="submit" class="btn-success" name="buy" >buy</button>
+                </form></td>
+
+            </tr>
+        </th:block>
+    </table>
 </div> <!-- /container -->
 <!-- Bootstrap core JavaScript
 ================================================== -->

@@ -14,9 +14,8 @@ public class libs {
 
     private Integer BookId;
 
-    public libs(Integer userId, Integer bookId) {
-        UserId = userId;
-        BookId = bookId;
+    public libs() {
+        super();
     }
 
     public Integer getId() {

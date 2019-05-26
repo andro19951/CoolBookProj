@@ -27,7 +27,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#" th:text="${username}">Project name</a>
+                <a class="navbar-brand" href="/" th:text="${username}">Project name</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -37,6 +37,9 @@
                     <li><a href="/Register">Register</a></li>
                     <li><a href="/addCash">add balance</a></li>
                     <li><a href="/yourbooks">your library</a></li>
+                    <li th:if="${dude.getAdmin_not()==1}"><a href="/admin/addbook">add book</a></li>
+                    <li th:if="${dude.getAdmin_not()==1}"><a href="/admin/users">add admin</a></li>
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>
@@ -47,7 +50,7 @@
         </div><!--/.container-fluid -->
     </nav>    <!-- Main component for a primary marketing message or call to action -->
     <div class="jumbotron">
-       <form method="get" action="/admin/addbook" >
+       <form method="get" action="/admin/bookadded" >
            <p>Input book name :</p><input type="text" name="bName"/> <br/>
            <p>Input book Cover link :</p><input type="text" name="bCover"/>
            <p>Input book link :</p> <input type="text" name="bLink"/>
