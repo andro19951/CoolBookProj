@@ -254,6 +254,29 @@ public class WebAppContoller {
         return "users";
 
     }
+    @RequestMapping(value = "/admin/users", params = "delete", method = {RequestMethod.POST, RequestMethod.GET})
+    public String deleteuser(Model model, @RequestParam String email) {
+
+        users user1 = usersrepository.findByEmail(email);
+        usersrepository.delete(user1);
+
+        String username = currentuser.getUser_name();
+
+        if (username != null) {
+            model.addAttribute("username", username);
+        }
+        model.addAttribute("mode", appMode);
+
+        model.addAttribute("dude", currentuser);
+
+        model.addAttribute("datetime", new Date());
+        model.addAttribute("username", username);
+        model.addAttribute("dudes", usersrepository.findAll());
+        model.addAttribute("mode", appMode);
+
+        return "users";
+
+    }
     @RequestMapping(value = "/addCash",  method ={ RequestMethod.POST, RequestMethod.GET})
     public  String getcash(Model model) {
         String username= currentuser.getUser_name();
