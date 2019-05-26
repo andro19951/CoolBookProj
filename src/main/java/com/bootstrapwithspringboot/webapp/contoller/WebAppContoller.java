@@ -348,4 +348,20 @@ public class WebAppContoller {
         return "books";
 
     }
+    
+    @RequestMapping(value = "/yourbooks", method = {RequestMethod.GET, RequestMethod.POST})
+    public String yourbooks(Model model) {
+        libs lib = new libs();
+        books book = new books();
+        List<books> mybooks = new ArrayList<>();
+        List<libs> liblist = (List<libs>) libsrepository.findByUserId(currentuser.getId());
+        for (libs li: liblist ) {
+            book = bookrepository.findById(li.getBookId());
+            mybooks.add(book);
+        }
+        model.addAttribute("mybooks", mybooks);
+        model.addAttribute("mode", appMode);
+
+        return "yourlib";
+    }
 }
