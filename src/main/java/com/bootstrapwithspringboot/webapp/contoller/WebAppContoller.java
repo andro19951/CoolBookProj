@@ -10,6 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
 
@@ -278,34 +279,9 @@ public class WebAppContoller {
         return "users";
 
     }
-    @RequestMapping(value = "/addCash", method = {RequestMethod.POST, RequestMethod.GET})
-    public String getcash(Model model) {
-        String username = currentuser.getUser_name();
 
 
-        if (username != null) {
-            model.addAttribute("username", username);
-        }
-
-        model.addAttribute("books", bookrepository.findAll());
-        model.addAttribute("mode", appMode);
-        model.addAttribute("datetime", new Date());
-        model.addAttribute("username", username);
-        model.addAttribute("dude", currentuser);
-        model.addAttribute("mode", appMode);
-
-        return "addcash";
-
-    }
-
-    @RequestMapping(value = "/addCash", params = "addcash", method = {RequestMethod.POST, RequestMethod.GET})
-    public String getcash1(Model model, @RequestParam Integer credit) {
-        String username = currentuser.getUser_name();
-
-        users user = (users) usersrepository.findByEmail(currentuser.getEmail());
-        user.setCredit(credit + currentuser.getCredit());
-        usersrepository.save(user);
-
+    private void GetCashData(Model model, String username, users user) {
         if (username != null) {
             model.addAttribute("username", username);
         }
@@ -317,25 +293,12 @@ public class WebAppContoller {
         model.addAttribute("username", username);
         model.addAttribute("dude", currentuser);
         model.addAttribute("mode", appMode);
-
-
-        return "addcash";
-
     }
 
     @RequestMapping(value = "/books", method = {RequestMethod.GET, RequestMethod.POST})
     public String allbooks(Model model) {
         String username = currentuser.getUser_name();
-        if (username != null) {
-            model.addAttribute("username", username);
-        }
-
-        model.addAttribute("books", bookrepository.findAll());
-        model.addAttribute("mode", appMode);
-        model.addAttribute("datetime", new Date());
-        model.addAttribute("username", username);
-        model.addAttribute("dude", currentuser);
-        model.addAttribute("mode", appMode);
+        SendInfoToHtml(model, username);
 
         return "books";
 
@@ -359,6 +322,13 @@ public class WebAppContoller {
 
         }
 
+        SendInfoToHtml(model, username);
+
+        return "books";
+
+    }
+
+    private void SendInfoToHtml(Model model, String username) {
         if (username != null) {
             model.addAttribute("username", username);
         }
@@ -369,9 +339,6 @@ public class WebAppContoller {
         model.addAttribute("username", username);
         model.addAttribute("dude", currentuser);
         model.addAttribute("mode", appMode);
-
-        return "books";
-
     }
 
     @RequestMapping(value = "/yourbooks", method = {RequestMethod.GET, RequestMethod.POST})
